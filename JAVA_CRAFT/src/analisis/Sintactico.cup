@@ -1,0 +1,100 @@
+package analisis;
+
+//importaciones
+import java_cup.runtime.Symbol;
+import java.util.LinkedList;
+import abstracto.Instruccion;
+import simbolo.Tipo;
+import simbolo.TipoDato;
+
+
+//Instrucciones
+import instrucciones.Print;
+
+//Expresiones
+import expresiones.Nativo;
+
+
+
+// parser
+parser code
+{:
+    scanner s;
+    parser(scanner s) { this.s = s;}
+
+
+    public void syntax_erro(Symbol s){
+        System.out.println("Error Sintatico en la linea " +
+        (s.left) + " y columna " + (s.right) + 
+        " No se esperaba el componente: " + (s.value) + ".");
+    }
+
+    public void unrecovered_syntax_error(Symbol s){
+        System.out.println("Error Sintactico no recuperable en la linea " + 
+        (s.left) + " y columna " + (s.right) + 
+        ". No se esperaba el componente: " + (s.value) + ".");
+    }
+:}
+
+action code 
+{:
+
+:}
+
+terminal String CADENA,ENTERO, DECIMAL;
+terminal FINCADENA, IMPRIMIR;
+//terminal MAS, MENOS, MULTIPLICACION, DIVISION;
+terminal PAR_A, PAR_C;
+//terminal UMENOS;
+
+nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
+nonterminal Instruccion INSTRUCCION;
+nonterminal Instruccion EXPRESION;
+
+/*precedence left MAS, MENOS;
+precedence left MULTIPLICACION, DIVISION;
+precedence right UMENOS;
+*/
+start with INICIO;
+
+INICIO ::= INSTRUCCIONES:a                                    {:  RESULT  = a;   :}
+;
+INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b             {:  RESULT = a; RESULT.add(b);  :}
+                | INSTRUCCION:a                             {:  RESULT = new LinkedList<>(); RESULT.add(a); :}
+;
+
+INSTRUCCION ::= IMPRIMIR PAR_A EXPRESION:a PAR_C FINCADENA  {:  RESULT = new Print(a, aleft,aright); :}
+                  
+;
+
+EXPRESION ::= ENTERO:a          {:  RESULT = new Nativo(Integer.parseInt(a), new Tipo(TipoDato.ENTERO),aleft, aright);  :}
+            | DECIMAL:a         {:  RESULT = new Nativo(new Double(a), new Tipo(TipoDato.DECIMAL), aleft, aright); :}
+            | CADENA:a          {:  RESULT = new Nativo(a, new Tipo(TipoDato.CADENA), aleft, aright);    :}
+;
+
+
+
+
+
+
+            /* 
+            MENOS EXPRESION:a                         {:     RESULT = a *-1;  :} %prec UMENOS
+            | EXPRESION:a MAS EXPRESION:b               {:     RESULT = a + b;  :}
+            | EXPRESION:a MENOS EXPRESION:b             {:     RESULT = a - b;  :}
+            | EXPRESION:a MULTIPLICACION EXPRESION:b    {:     RESULT = a * b;  :}
+            | EXPRESION:a DIVISION EXPRESION:b          {:     RESULT = a / b;  :}
+            | ENTERO:a                                  {:     RESULT = new Double(a);  :}
+            | DECIMAL:a                                 {:     RESULT = new Double(a);  :}
+            | PAR_A EXPRESION:a PAR_C                   {:     RESULT = a;  :}
+;
+*/
+
+
+/*
+    INICIO ::= INSRUCCIONES
+
+    INSTRUCCIONES ::= INSTRUCCION
+
+    INSTRUCCION ::= IMPRIMIR PAR_A EXPRESION PAR_C FINCADENA
+    INSTRUCCION ::= IMPRIMIR PAR_A CADENA PAR_C FINCADENA
+*/
