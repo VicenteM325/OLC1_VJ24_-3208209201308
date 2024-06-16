@@ -8,15 +8,28 @@ package analisis;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
+  public static final int DIFEREN = 18;
+  public static final int MENOS = 10;
+  public static final int MULTIPLICACION = 11;
+  public static final int MAYOR_IGUAL_QUE = 21;
   public static final int CADENA = 2;
-  public static final int PAR_A = 7;
-  public static final int DECIMAL = 4;
-  public static final int ENTERO = 3;
-  public static final int EOF = 0;
   public static final int FINCADENA = 5;
-  public static final int error = 1;
-  public static final int IMPRIMIR = 6;
+  public static final int DECIMAL = 4;
+  public static final int MENOR_IGUAL_QUE = 19;
+  public static final int DIVISION = 12;
+  public static final int POTENCIA = 13;
   public static final int PAR_C = 8;
+  public static final int IMPRIMIR = 6;
+  public static final int MAYOR_QUE = 17;
+  public static final int MODULO = 14;
+  public static final int UMENOS = 15;
+  public static final int PAR_A = 7;
+  public static final int MENOR_QUE = 16;
+  public static final int EOF = 0;
+  public static final int IGUALACION = 20;
+  public static final int error = 1;
+  public static final int ENTERO = 3;
+  public static final int MAS = 9;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -26,7 +39,20 @@ public class sym {
   "FINCADENA",
   "IMPRIMIR",
   "PAR_A",
-  "PAR_C"
+  "PAR_C",
+  "MAS",
+  "MENOS",
+  "MULTIPLICACION",
+  "DIVISION",
+  "POTENCIA",
+  "MODULO",
+  "UMENOS",
+  "MENOR_QUE",
+  "MAYOR_QUE",
+  "DIFEREN",
+  "MENOR_IGUAL_QUE",
+  "IGUALACION",
+  "MAYOR_IGUAL_QUE"
   };
 }
 

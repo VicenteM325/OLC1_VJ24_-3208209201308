@@ -8,7 +8,7 @@ public enum TipoDato {
     ENTERO,
     DECIMAL,
     BOOLEANO,
-    CARACER,
+    CARACTER,
     CADENA,
     VOID
 }

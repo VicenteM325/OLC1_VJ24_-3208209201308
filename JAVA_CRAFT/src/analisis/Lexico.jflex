@@ -27,6 +27,31 @@ import java_cup.runtime.Symbol;
 // definir los simbolos del sistema
 PAR_A = "("
 PAR_C = ")"
+
+//Relacionales especiales
+IGUALACION = "=="
+DIFEREN = "!="
+MENOR_IGUAL_QUE = "<="
+MAYOR_IGUAL_QUE = ">="
+
+//Aritmeticos
+POTENCIA = "**"
+MAS = "+"
+MENOS = "-"
+MULTIPLICACION = "*"
+DIVISION = "/"
+MODULO = "%"
+
+//Relacionales
+MENOR_QUE = "<"
+MAYOR_QUE = ">"
+
+//Logicos
+AND = "&&"
+OR = "\|\|"
+XOR = "\^"
+NOT = "!"
+
 FINCADENA = ";"
 /*MAS = "+"
 MENOS = "-"
@@ -52,12 +77,32 @@ IMPRIMIR = "imprimir"
     }
 
 <YYINITIAL>  {FINCADENA} {return new Symbol(sym.FINCADENA, yyline, yycolumn, yytext());}
-/*<YYINITIAL>  {MAS} {return new Symbol(sym.MAS, yyline, yycolumn, yytext());}
-<YYINITIAL>  {MENOS} {return new Symbol(sym.MENOS, yyline, yycolumn, yytext());}
-<YYINITIAL>  {MULTIPLICACION} {return new Symbol(sym.MULTIPLICACION, yyline, yycolumn, yytext());}
-<YYINITIAL>  {DIVISION} {return new Symbol(sym.DIVISION, yyline, yycolumn, yytext());}*/
 <YYINITIAL>  {PAR_A} {return new Symbol(sym.PAR_A, yyline, yycolumn, yytext());}
 <YYINITIAL>  {PAR_C} {return new Symbol(sym.PAR_C, yyline, yycolumn, yytext());}
+
+//ARITMETICOS
+<YYINITIAL>  {MAS} {return new Symbol(sym.MAS, yyline, yycolumn, yytext());}
+<YYINITIAL>  {MENOS} {return new Symbol(sym.MENOS, yyline, yycolumn, yytext());}
+<YYINITIAL>  {POTENCIA} {return new Symbol(sym.POTENCIA, yyline, yycolumn, yytext());}
+<YYINITIAL>  {MULTIPLICACION} {return new Symbol(sym.MULTIPLICACION, yyline, yycolumn, yytext());}
+<YYINITIAL>  {DIVISION} {return new Symbol(sym.DIVISION, yyline, yycolumn, yytext());}
+<YYINITIAL>  {MODULO} {return new Symbol(sym.MODULO, yyline, yycolumn, yytext());}
+
+//RELACIONALES
+<YYINITIAL>  {IGUALACION} {return new Symbol(sym.IGUALACION, yyline, yycolumn, yytext());}
+<YYINITIAL>  {DIFEREN} {return new Symbol(sym.DIFEREN, yyline, yycolumn, yytext());}
+<YYINITIAL>  {MENOR_IGUAL_QUE} {return new Symbol(sym.MENOR_IGUAL_QUE, yyline, yycolumn, yytext());}
+<YYINITIAL>  {MAYOR_IGUAL_QUE} {return new Symbol(sym.MAYOR_IGUAL_QUE, yyline, yycolumn, yytext());}
+<YYINITIAL>  {MENOR_QUE} {return new Symbol(sym.MENOR_QUE, yyline, yycolumn, yytext());}
+<YYINITIAL>  {MAYOR_QUE} {return new Symbol(sym.MAYOR_QUE, yyline, yycolumn, yytext());}
+
+//LOGICOS
+<YYINITIAL>  {AND} {return new Symbol(sym.MAS, yyline, yycolumn, yytext());}
+<YYINITIAL>  {OR} {return new Symbol(sym.MENOS, yyline, yycolumn, yytext());}
+<YYINITIAL>  {XOR} {return new Symbol(sym.MAS, yyline, yycolumn, yytext());}
+<YYINITIAL>  {NOT} {return new Symbol(sym.MENOS, yyline, yycolumn, yytext());}
+
+
 <YYINITIAL>  {BLANCOS} {}
 
 

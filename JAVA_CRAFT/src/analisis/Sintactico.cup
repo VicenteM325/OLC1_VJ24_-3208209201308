@@ -13,6 +13,9 @@ import instrucciones.Print;
 
 //Expresiones
 import expresiones.Nativo;
+import expresiones.Aritmeticas;
+import expresiones.OperadoresAritmeticos;
+import expresiones.*;
 
 
 
@@ -44,13 +47,17 @@ action code
 terminal String CADENA,ENTERO, DECIMAL;
 terminal FINCADENA, IMPRIMIR;
 //terminal MAS, MENOS, MULTIPLICACION, DIVISION;
-terminal PAR_A, PAR_C;
-//terminal UMENOS;
+terminal PAR_A, PAR_C, MAS, MENOS, MULTIPLICACION,DIVISION,POTENCIA, MODULO, UMENOS;
+terminal MENOR_QUE, MAYOR_QUE, DIFEREN, MENOR_IGUAL_QUE, IGUALACION, MAYOR_IGUAL_QUE;
 
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
 nonterminal Instruccion INSTRUCCION;
 nonterminal Instruccion EXPRESION;
 
+precedence left MAS, MENOS;
+precedence left MULTIPLICACION, DIVISION;
+precedence left POTENCIA, MODULO;
+precedence left UMENOS;
 /*precedence left MAS, MENOS;
 precedence left MULTIPLICACION, DIVISION;
 precedence right UMENOS;
@@ -67,7 +74,14 @@ INSTRUCCION ::= IMPRIMIR PAR_A EXPRESION:a PAR_C FINCADENA  {:  RESULT = new Pri
                   
 ;
 
-EXPRESION ::= ENTERO:a          {:  RESULT = new Nativo(Integer.parseInt(a), new Tipo(TipoDato.ENTERO),aleft, aright);  :}
+EXPRESION ::= MENOS EXPRESION:a {:   RESULT = new Aritmeticas(a,OperadoresAritmeticos.NEGACION, aleft, aright);    :}%prec UMENOS
+            | EXPRESION:a MAS EXPRESION:b    {: RESULT = new Aritmeticas(a,b, OperadoresAritmeticos.SUMA, aleft, aright);   :}
+            | EXPRESION:a MENOS EXPRESION:b  {: RESULT = new Aritmeticas(a,b, OperadoresAritmeticos.RESTA, aleft, aright);  :}
+            | EXPRESION:a POTENCIA EXPRESION:b {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.POTENCIA, aleft, aright);  :} %prec POTENCIA
+            | EXPRESION:a MULTIPLICACION EXPRESION:b {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.MULTIPLICACION, aleft, aright);  :}
+            | EXPRESION:a DIVISION EXPRESION:b {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.DIVISION, aleft, aright);  :}
+            | EXPRESION:a MODULO EXPRESION:b {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.MODULO, aleft, aright);  :}
+            | ENTERO:a          {:  RESULT = new Nativo(Integer.parseInt(a), new Tipo(TipoDato.ENTERO),aleft, aright);  :}
             | DECIMAL:a         {:  RESULT = new Nativo(new Double(a), new Tipo(TipoDato.DECIMAL), aleft, aright); :}
             | CADENA:a          {:  RESULT = new Nativo(a, new Tipo(TipoDato.CADENA), aleft, aright);    :}
 ;

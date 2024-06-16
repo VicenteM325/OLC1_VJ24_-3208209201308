@@ -18,8 +18,8 @@ public class JAVA_CRAFT {
 
     public static void main(String[] args) {
             try{
-                String texto = "imprimir(\"Mi cadena\");"
-                        + "imprimir(2); imprimir(3.33);";
+                String texto = "imprimir(\"Mi cadena\"+1);"
+                        + "imprimir(5/5.5);";
                 scanner s = new scanner(new BufferedReader(new StringReader(texto)));
                 parser p = new parser(s);
                 var resultado = p.parse();
