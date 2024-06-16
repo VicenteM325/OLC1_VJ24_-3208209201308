@@ -8,36 +8,46 @@ package analisis;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int DIFEREN = 18;
-  public static final int MENOS = 10;
-  public static final int MULTIPLICACION = 11;
-  public static final int MAYOR_IGUAL_QUE = 21;
+  public static final int DIFEREN = 20;
+  public static final int AND = 25;
+  public static final int MENOS = 12;
+  public static final int MULTIPLICACION = 13;
+  public static final int MAYOR_IGUAL_QUE = 23;
   public static final int CADENA = 2;
-  public static final int FINCADENA = 5;
+  public static final int OR = 24;
+  public static final int FINCADENA = 7;
   public static final int DECIMAL = 4;
-  public static final int MENOR_IGUAL_QUE = 19;
-  public static final int DIVISION = 12;
-  public static final int POTENCIA = 13;
-  public static final int PAR_C = 8;
-  public static final int IMPRIMIR = 6;
-  public static final int MAYOR_QUE = 17;
-  public static final int MODULO = 14;
-  public static final int UMENOS = 15;
-  public static final int PAR_A = 7;
-  public static final int MENOR_QUE = 16;
+  public static final int MENOR_IGUAL_QUE = 21;
+  public static final int DIVISION = 14;
+  public static final int NOT = 27;
+  public static final int POTENCIA = 15;
+  public static final int PAR_C = 10;
+  public static final int TRUE = 28;
+  public static final int MAYOR_QUE = 19;
+  public static final int UMENOS = 17;
+  public static final int MODULO = 16;
+  public static final int PAR_A = 9;
+  public static final int ID = 5;
+  public static final int CARACTER = 6;
+  public static final int MENOR_QUE = 18;
   public static final int EOF = 0;
-  public static final int IGUALACION = 20;
+  public static final int PRINTLN = 8;
+  public static final int IGUALACION = 22;
+  public static final int FALSE = 29;
   public static final int error = 1;
+  public static final int XOR = 26;
   public static final int ENTERO = 3;
-  public static final int MAS = 9;
+  public static final int MAS = 11;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "CADENA",
   "ENTERO",
   "DECIMAL",
+  "ID",
+  "CARACTER",
   "FINCADENA",
-  "IMPRIMIR",
+  "PRINTLN",
   "PAR_A",
   "PAR_C",
   "MAS",
@@ -52,7 +62,13 @@ public class sym {
   "DIFEREN",
   "MENOR_IGUAL_QUE",
   "IGUALACION",
-  "MAYOR_IGUAL_QUE"
+  "MAYOR_IGUAL_QUE",
+  "OR",
+  "AND",
+  "XOR",
+  "NOT",
+  "TRUE",
+  "FALSE"
   };
 }
 

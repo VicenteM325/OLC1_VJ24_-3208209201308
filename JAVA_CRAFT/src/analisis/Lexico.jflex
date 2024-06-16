@@ -1,16 +1,20 @@
 package analisis;
 
 import java_cup.runtime.Symbol;
+import java.util.LinkedList;
+import excepciones.Errores;
 
 %%
 
 // codigo usuario
 %{
+     public LinkedList<Errores> listaErrores = new LinkedList<>();
 %}
 // Definiciones Iniciales
 %init{
     yyline = 1;
     yycolumn = 1;
+    listaErrores = new LinkedList<>();
 %init}
 
 // Declaraciones de caracteristicas de jflex
@@ -53,21 +57,33 @@ XOR = "\^"
 NOT = "!"
 
 FINCADENA = ";"
-/*MAS = "+"
-MENOS = "-"
-MULTIPLICACION = "*"
-DIVISION = "/" */
+
 BLANCOS = [\ \r\t\n\f]+
 ENTERO = [0-9]+
 DECIMAL = [0-9]+"."[0-9]+
+ID=[a-zA-z][a-zA-Z0-9_]*
 CADENA = [\"][^\"]*[\"]
+CARACTER = [\']([^\'])*[\']
 
 // palabras reservadas
-IMPRIMIR = "imprimir"
+PRINTLN="println"
+TRUE = "true"
+FALSE = "false"
 
 %%
+//PALABRAS RESERVADAS
+<YYINITIAL>  {PRINTLN} {return new Symbol(sym.PRINTLN, yyline, yycolumn, yytext());}
+<YYINITIAL>  {TRUE} {return new Symbol(sym.TRUE, yyline, yycolumn, yytext());}
+<YYINITIAL>  {FALSE} {return new Symbol(sym.FALSE, yyline, yycolumn, yytext());}
 
-<YYINITIAL>  {IMPRIMIR} {return new Symbol(sym.IMPRIMIR, yyline, yycolumn, yytext());}
+//LOGICOS
+<YYINITIAL>  {AND} {return new Symbol(sym.AND, yyline, yycolumn, yytext());}
+<YYINITIAL>  {OR} {return new Symbol(sym.OR, yyline, yycolumn, yytext());}
+<YYINITIAL>  {XOR} {return new Symbol(sym.XOR, yyline, yycolumn, yytext());}
+<YYINITIAL>  {NOT} {return new Symbol(sym.NOT, yyline, yycolumn, yytext());}
+
+<YYINITIAL> {ID} {return new Symbol(sym.ID, yyline, yycolumn, yytext());}
+
 <YYINITIAL>  {DECIMAL} {return new Symbol(sym.DECIMAL, yyline, yycolumn, yytext());}
 <YYINITIAL>  {ENTERO} {return new Symbol(sym.ENTERO, yyline, yycolumn, yytext());}
 <YYINITIAL>  {CADENA} {
@@ -75,6 +91,13 @@ IMPRIMIR = "imprimir"
     cadena = cadena.substring(1,cadena.length()-1);
     return new Symbol(sym.CADENA, yyline, yycolumn, cadena);
     }
+
+<YYINITIAL>  {CARACTER} {
+    String caracter = yytext();
+    caracter = caracter.substring(1,caracter.length()-1);
+    return new Symbol(sym.CARACTER, yyline, yycolumn, caracter);
+    }
+
 
 <YYINITIAL>  {FINCADENA} {return new Symbol(sym.FINCADENA, yyline, yycolumn, yytext());}
 <YYINITIAL>  {PAR_A} {return new Symbol(sym.PAR_A, yyline, yycolumn, yytext());}
@@ -96,25 +119,12 @@ IMPRIMIR = "imprimir"
 <YYINITIAL>  {MENOR_QUE} {return new Symbol(sym.MENOR_QUE, yyline, yycolumn, yytext());}
 <YYINITIAL>  {MAYOR_QUE} {return new Symbol(sym.MAYOR_QUE, yyline, yycolumn, yytext());}
 
-//LOGICOS
-<YYINITIAL>  {AND} {return new Symbol(sym.MAS, yyline, yycolumn, yytext());}
-<YYINITIAL>  {OR} {return new Symbol(sym.MENOS, yyline, yycolumn, yytext());}
-<YYINITIAL>  {XOR} {return new Symbol(sym.MAS, yyline, yycolumn, yytext());}
-<YYINITIAL>  {NOT} {return new Symbol(sym.MENOS, yyline, yycolumn, yytext());}
 
 
 <YYINITIAL>  {BLANCOS} {}
 
-
-
-/* Estado cadena
-
-<CADENA> {
-    [\"]    {String tmp = cadena;
-            cadena = "";
-            yybegin(YYINITIAL);
-            return new Symbol(sym.CADENA, yyline, yycolumn, tmp);}
-
-    [^\"]  {cadena += yytext();}
+<YYINITIAL> . {
+                listaErrores.add(new Errores("LEXICO","El caracter "+
+                yytext() + " no pertenece al lenguaje ", yyline, yycolumn));
 }
-*/
+

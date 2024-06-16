@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import abstracto.Instruccion;
 import simbolo.Tipo;
 import simbolo.TipoDato;
+import excepciones.Errores;
 
 
 //Instrucciones
@@ -24,15 +25,23 @@ parser code
 {:
     scanner s;
     parser(scanner s) { this.s = s;}
+    public LinkedList<Errores> listaErrores = new LinkedList<>();
 
-
-    public void syntax_erro(Symbol s){
+    public void syntax_error(Symbol s){
+        listaErrores.add(new Errores("SINTACTICO RECUPERABLE",
+                        "No se esperaba el componente "+s.value,
+                        s.left,
+                        s.right));
         System.out.println("Error Sintatico en la linea " +
         (s.left) + " y columna " + (s.right) + 
         " No se esperaba el componente: " + (s.value) + ".");
     }
 
     public void unrecovered_syntax_error(Symbol s){
+        listaErrores.add(new Errores("SINTACTICO NO RECUPERABLE",
+                        "No se esperaba el componente "+s.value,
+                        s.left,
+                        s.right));
         System.out.println("Error Sintactico no recuperable en la linea " + 
         (s.left) + " y columna " + (s.right) + 
         ". No se esperaba el componente: " + (s.value) + ".");
@@ -44,24 +53,25 @@ action code
 
 :}
 
-terminal String CADENA,ENTERO, DECIMAL;
-terminal FINCADENA, IMPRIMIR;
-//terminal MAS, MENOS, MULTIPLICACION, DIVISION;
+terminal String CADENA,ENTERO, DECIMAL, ID, CARACTER;
+terminal FINCADENA, PRINTLN;
 terminal PAR_A, PAR_C, MAS, MENOS, MULTIPLICACION,DIVISION,POTENCIA, MODULO, UMENOS;
 terminal MENOR_QUE, MAYOR_QUE, DIFEREN, MENOR_IGUAL_QUE, IGUALACION, MAYOR_IGUAL_QUE;
+terminal OR, AND, XOR, NOT;
+terminal TRUE, FALSE;
 
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
 nonterminal Instruccion INSTRUCCION;
 nonterminal Instruccion EXPRESION;
 
+precedence left OR, AND, XOR;
+precedence left IGUALACION, DIFEREN, MENOR_IGUAL_QUE, MAYOR_IGUAL_QUE, MENOR_QUE, MAYOR_QUE;
 precedence left MAS, MENOS;
 precedence left MULTIPLICACION, DIVISION;
 precedence left POTENCIA, MODULO;
-precedence left UMENOS;
-/*precedence left MAS, MENOS;
-precedence left MULTIPLICACION, DIVISION;
+precedence left NOT;
 precedence right UMENOS;
-*/
+
 start with INICIO;
 
 INICIO ::= INSTRUCCIONES:a                                    {:  RESULT  = a;   :}
@@ -70,21 +80,34 @@ INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b             {:  RESULT = a; RESU
                 | INSTRUCCION:a                             {:  RESULT = new LinkedList<>(); RESULT.add(a); :}
 ;
 
-INSTRUCCION ::= IMPRIMIR PAR_A EXPRESION:a PAR_C FINCADENA  {:  RESULT = new Print(a, aleft,aright); :}
+INSTRUCCION ::= PRINTLN PAR_A EXPRESION:a PAR_C FINCADENA  {:  RESULT = new Print(a, aleft,aright); :}
                   
 ;
 
-EXPRESION ::= MENOS EXPRESION:a {:   RESULT = new Aritmeticas(a,OperadoresAritmeticos.NEGACION, aleft, aright);    :}%prec UMENOS
-            | EXPRESION:a MAS EXPRESION:b    {: RESULT = new Aritmeticas(a,b, OperadoresAritmeticos.SUMA, aleft, aright);   :}
-            | EXPRESION:a MENOS EXPRESION:b  {: RESULT = new Aritmeticas(a,b, OperadoresAritmeticos.RESTA, aleft, aright);  :}
-            | EXPRESION:a POTENCIA EXPRESION:b {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.POTENCIA, aleft, aright);  :} %prec POTENCIA
-            | EXPRESION:a MULTIPLICACION EXPRESION:b {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.MULTIPLICACION, aleft, aright);  :}
-            | EXPRESION:a DIVISION EXPRESION:b {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.DIVISION, aleft, aright);  :}
-            | EXPRESION:a MODULO EXPRESION:b {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.MODULO, aleft, aright);  :}
-            | ENTERO:a          {:  RESULT = new Nativo(Integer.parseInt(a), new Tipo(TipoDato.ENTERO),aleft, aright);  :}
-            | DECIMAL:a         {:  RESULT = new Nativo(new Double(a), new Tipo(TipoDato.DECIMAL), aleft, aright); :}
-            | CADENA:a          {:  RESULT = new Nativo(a, new Tipo(TipoDato.CADENA), aleft, aright);    :}
-;
+EXPRESION ::= MENOS EXPRESION:a                                 {:   RESULT = new Aritmeticas(a,OperadoresAritmeticos.NEGACION, aleft, aright);      :}%prec UMENOS
+            | DIFEREN EXPRESION:a                               {: RESULT = new Logicos(a, OperadoresLogicos.NOT, aleft, aright);                  :}%prec NOT
+            | EXPRESION:a MAS EXPRESION:b                       {: RESULT = new Aritmeticas(a,b, OperadoresAritmeticos.SUMA, aleft, aright);         :}
+            | EXPRESION:a MENOS EXPRESION:b                     {: RESULT = new Aritmeticas(a,b, OperadoresAritmeticos.RESTA, aleft, aright);        :}
+            | EXPRESION:a POTENCIA EXPRESION:b                  {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.POTENCIA, aleft, aright);      :} %prec POTENCIA
+            | EXPRESION:a MULTIPLICACION EXPRESION:b            {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.MULTIPLICACION, aleft, aright);:}
+            | EXPRESION:a DIVISION EXPRESION:b                  {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.DIVISION, aleft, aright);      :}
+            | EXPRESION:a MODULO EXPRESION:b                    {: RESULT = new Aritmeticas(a,b,OperadoresAritmeticos.MODULO, aleft, aright);        :}
+            | EXPRESION:a IGUALACION EXPRESION:b                {: RESULT = new Relacionales(a,b,OperadoresRelacionales.IGUALACION, aleft, aright);  :}
+            | EXPRESION:a DIFEREN EXPRESION:b                   {: RESULT = new Relacionales(a,b,OperadoresRelacionales.DIFEREN, aleft, aright);     :}
+            | EXPRESION:a MENOR_IGUAL_QUE EXPRESION:b           {: RESULT = new Relacionales(a,b,OperadoresRelacionales.MENOR_IGUAL_QUE, aleft, aright);:}
+            | EXPRESION:a MAYOR_IGUAL_QUE EXPRESION:b           {: RESULT = new Relacionales(a,b,OperadoresRelacionales.MAYOR_IGUAL_QUE, aleft, aright);:}
+            | EXPRESION:a MENOR_QUE EXPRESION:b                 {: RESULT = new Relacionales(a,b,OperadoresRelacionales.MENOR_QUE, aleft, aright);    :}
+            | EXPRESION:a MAYOR_QUE EXPRESION:b                 {: RESULT = new Relacionales(a,b,OperadoresRelacionales.MAYOR_QUE, aleft, aright);    :}
+            | EXPRESION:a OR EXPRESION:b                        {: RESULT = new Logicos(a,b,OperadoresLogicos.OR, aleft, aright);                     :}
+            | EXPRESION:a AND EXPRESION:b                       {: RESULT = new Logicos(a,b,OperadoresLogicos.AND, aleft, aright);                    :}
+            | EXPRESION:a XOR EXPRESION:b                       {: RESULT = new Logicos(a,b,OperadoresLogicos.XOR, aleft, aright);                    :}
+            | ENTERO:a                                          {: RESULT = new Nativo(Integer.parseInt(a), new Tipo(TipoDato.ENTERO),aleft, aright); :}
+            | DECIMAL:a                                         {: RESULT = new Nativo(new Double(a), new Tipo(TipoDato.DECIMAL), aleft, aright);     :}
+            | CADENA:a                                          {: RESULT = new Nativo(a, new Tipo(TipoDato.CADENA), aleft, aright);                  :}
+            | CARACTER:a                                        {: RESULT = new Nativo(a, new Tipo(TipoDato.CARACTER), aleft, aright);                :}
+            | TRUE:a                                            {: RESULT = new Nativo(true, new Tipo(TipoDato.BOOLEANO), aleft, aright );            :}
+            | FALSE:a                                           {: RESULT = new Nativo(false, new Tipo(TipoDato.BOOLEANO), aleft, aright );           :}
+;           
 
 
 
