@@ -418,13 +418,20 @@ public class Principal extends javax.swing.JFrame {
             lista.addAll(s.listaErrores);
             lista.addAll(p.listaErrores);
             for (var a : ast.getInstrucciones()) {
+                if(a == null){
+                    continue;
+                }
                 var res = a.interpretar(ast, tabla);
+                if(res instanceof Errores){
+                    lista.add((Errores) res);
+                }
             }
-            
             jConsola3.setText(ast.getConsola());
             System.out.println(ast.getConsola());
-          
 
+            for(var i:lista){
+                System.out.println(i);
+            }
         } catch (Exception ex) {
             System.out.println("Algo salio mal");
 
@@ -445,11 +452,20 @@ public class Principal extends javax.swing.JFrame {
             lista.addAll(s.listaErrores);
             lista.addAll(p.listaErrores);
             for (var a : ast.getInstrucciones()) {
+                if(a == null){
+                    continue;
+                }
                 var res = a.interpretar(ast, tabla);
+                if(res instanceof Errores){
+                    lista.add((Errores) res);
+                }
             }
             jConsola2.setText(ast.getConsola());
             System.out.println(ast.getConsola());
 
+            for(var i:lista){
+                System.out.println(i);
+            }
         } catch (Exception ex) {
             System.out.println("Algo salio mal");
 
@@ -470,11 +486,20 @@ public class Principal extends javax.swing.JFrame {
             lista.addAll(s.listaErrores);
             lista.addAll(p.listaErrores);
             for (var a : ast.getInstrucciones()) {
+                if(a == null){
+                    continue;
+                }
                 var res = a.interpretar(ast, tabla);
+                if(res instanceof Errores){
+                    lista.add((Errores) res);
+                }
             }
             jConsola.setText(ast.getConsola());
             System.out.println(ast.getConsola());
 
+            for(var i:lista){
+                System.out.println(i);
+            }
         } catch (Exception ex) {
             System.out.println("Algo salio mal");
 

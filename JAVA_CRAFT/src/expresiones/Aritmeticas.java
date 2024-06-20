@@ -254,7 +254,7 @@ public class Aritmeticas extends Instruccion {
         var tipo1 = this.operando1.tipo.getTipo();
         var tipo2 = this.operando2.tipo.getTipo();
 
-        if ((int) op2 == 0 || (double) op2 == 0.0) {
+        if ((tipo2 == TipoDato.ENTERO && (int) op2 == 0) || (tipo2 == TipoDato.DECIMAL && (double) op2 == 0.0)) {
             return new Errores("SEMANTICO", "División por cero", this.linea, this.columna);
         }
 
@@ -263,7 +263,7 @@ public class Aritmeticas extends Instruccion {
                 switch (tipo2) {
                     case ENTERO -> {
                         this.tipo.setTipo(TipoDato.DECIMAL);
-                        return (int) op1 / (int) op2;
+                        return (double)((int) op1 / (int) op2);
                     }
                     case DECIMAL -> {
                         this.tipo.setTipo(TipoDato.DECIMAL);

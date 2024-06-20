@@ -11,6 +11,7 @@ import excepciones.Errores;
 
 //Instrucciones
 import instrucciones.Print;
+import instrucciones.Declaracion;
 
 //Expresiones
 import expresiones.Nativo;
@@ -54,14 +55,16 @@ action code
 :}
 
 terminal String CADENA,ENTERO, DECIMAL, ID, CARACTER;
-terminal FINCADENA, PRINTLN;
+terminal FINCADENA, PRINTLN, INT, DOUBLE, STRING;
 terminal PAR_A, PAR_C, MAS, MENOS, MULTIPLICACION,DIVISION,POTENCIA, MODULO, UMENOS;
-terminal MENOR_QUE, MAYOR_QUE, DIFEREN, MENOR_IGUAL_QUE, IGUALACION, MAYOR_IGUAL_QUE;
+terminal MENOR_QUE, MAYOR_QUE, DIFEREN, MENOR_IGUAL_QUE, IGUALACION, MAYOR_IGUAL_QUE, IGUAL;
 terminal OR, AND, XOR, NOT;
 terminal TRUE, FALSE;
 
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
 nonterminal Instruccion INSTRUCCION;
+nonterminal Instruccion IMPRESION, DECLARACION;
+nonterminal Tipo TIPOS;
 nonterminal Instruccion EXPRESION;
 
 precedence left OR, AND, XOR;
@@ -80,8 +83,21 @@ INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b             {:  RESULT = a; RESU
                 | INSTRUCCION:a                             {:  RESULT = new LinkedList<>(); RESULT.add(a); :}
 ;
 
-INSTRUCCION ::= PRINTLN PAR_A EXPRESION:a PAR_C FINCADENA  {:  RESULT = new Print(a, aleft,aright); :}
-                  
+INSTRUCCION ::= IMPRESION:a                                       {: RESULT=a;  :}
+               | DECLARACION:a                                    {: RESULT=a;  :}
+               | error FINCADENA   
+               | error
+;
+
+IMPRESION ::=  PRINTLN PAR_A EXPRESION:a PAR_C FINCADENA        {:  RESULT = new Print(a, aleft,aright); :}
+;
+
+DECLARACION ::= TIPOS:a ID:b IGUAL EXPRESION:c FINCADENA        {:  RESULT = new Declaracion(b,c,a,aleft,aright); :}
+;
+
+TIPOS     ::= INT                                               {:  RESULT = new Tipo(TipoDato.ENTERO);  :}
+            | DOUBLE                                            {:  RESULT = new Tipo(TipoDato.DECIMAL); :}
+            | STRING                                            {:  RESULT = new Tipo(TipoDato.CADENA);  :}
 ;
 
 EXPRESION ::= MENOS EXPRESION:a                                 {:   RESULT = new Aritmeticas(a,OperadoresAritmeticos.NEGACION, aleft, aright);      :}%prec UMENOS
@@ -104,6 +120,7 @@ EXPRESION ::= MENOS EXPRESION:a                                 {:   RESULT = ne
             | ENTERO:a                                          {: RESULT = new Nativo(Integer.parseInt(a), new Tipo(TipoDato.ENTERO),aleft, aright); :}
             | DECIMAL:a                                         {: RESULT = new Nativo(new Double(a), new Tipo(TipoDato.DECIMAL), aleft, aright);     :}
             | CADENA:a                                          {: RESULT = new Nativo(a, new Tipo(TipoDato.CADENA), aleft, aright);                  :}
+            | ID:a                                              {: RESULT = new AccesoVar(a,aleft, aright);    :}
             | CARACTER:a                                        {: RESULT = new Nativo(a, new Tipo(TipoDato.CARACTER), aleft, aright);                :}
             | TRUE:a                                            {: RESULT = new Nativo(true, new Tipo(TipoDato.BOOLEANO), aleft, aright );            :}
             | FALSE:a                                           {: RESULT = new Nativo(false, new Tipo(TipoDato.BOOLEANO), aleft, aright );           :}
@@ -114,24 +131,3 @@ EXPRESION ::= MENOS EXPRESION:a                                 {:   RESULT = ne
 
 
 
-            /* 
-            MENOS EXPRESION:a                         {:     RESULT = a *-1;  :} %prec UMENOS
-            | EXPRESION:a MAS EXPRESION:b               {:     RESULT = a + b;  :}
-            | EXPRESION:a MENOS EXPRESION:b             {:     RESULT = a - b;  :}
-            | EXPRESION:a MULTIPLICACION EXPRESION:b    {:     RESULT = a * b;  :}
-            | EXPRESION:a DIVISION EXPRESION:b          {:     RESULT = a / b;  :}
-            | ENTERO:a                                  {:     RESULT = new Double(a);  :}
-            | DECIMAL:a                                 {:     RESULT = new Double(a);  :}
-            | PAR_A EXPRESION:a PAR_C                   {:     RESULT = a;  :}
-;
-*/
-
-
-/*
-    INICIO ::= INSRUCCIONES
-
-    INSTRUCCIONES ::= INSTRUCCION
-
-    INSTRUCCION ::= IMPRIMIR PAR_A EXPRESION PAR_C FINCADENA
-    INSTRUCCION ::= IMPRIMIR PAR_A CADENA PAR_C FINCADENA
-*/

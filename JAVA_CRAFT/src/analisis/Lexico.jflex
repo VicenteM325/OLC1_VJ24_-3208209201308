@@ -37,7 +37,7 @@ IGUALACION = "=="
 DIFEREN = "!="
 MENOR_IGUAL_QUE = "<="
 MAYOR_IGUAL_QUE = ">="
-
+IGUAL = "="
 //Aritmeticos
 POTENCIA = "**"
 MAS = "+"
@@ -65,14 +65,28 @@ ID=[a-zA-z][a-zA-Z0-9_]*
 CADENA = [\"][^\"]*[\"]
 CARACTER = [\']([^\'])*[\']
 
+//Comentarios
+COMENTARIO_LINEA = "//".*
+COMENTARIO_MULTIPLE = "/*"[^*]*"*"([^/]|[^*]*"*"[^/])*"*/"
+
+
 // palabras reservadas
 PRINTLN="println"
+INT = "int"
+DOUBLE = "double"
+STRING = "string"
 TRUE = "true"
 FALSE = "false"
+
+
+
 
 %%
 //PALABRAS RESERVADAS
 <YYINITIAL>  {PRINTLN} {return new Symbol(sym.PRINTLN, yyline, yycolumn, yytext());}
+<YYINITIAL>  {INT} {return new Symbol(sym.INT, yyline, yycolumn, yytext());}
+<YYINITIAL>  {DOUBLE} {return new Symbol(sym.DOUBLE, yyline, yycolumn, yytext());}
+<YYINITIAL>  {STRING} {return new Symbol(sym.STRING, yyline, yycolumn, yytext());}
 <YYINITIAL>  {TRUE} {return new Symbol(sym.TRUE, yyline, yycolumn, yytext());}
 <YYINITIAL>  {FALSE} {return new Symbol(sym.FALSE, yyline, yycolumn, yytext());}
 
@@ -118,10 +132,16 @@ FALSE = "false"
 <YYINITIAL>  {MAYOR_IGUAL_QUE} {return new Symbol(sym.MAYOR_IGUAL_QUE, yyline, yycolumn, yytext());}
 <YYINITIAL>  {MENOR_QUE} {return new Symbol(sym.MENOR_QUE, yyline, yycolumn, yytext());}
 <YYINITIAL>  {MAYOR_QUE} {return new Symbol(sym.MAYOR_QUE, yyline, yycolumn, yytext());}
+<YYINITIAL>  {IGUAL} {return new Symbol(sym.IGUAL, yyline, yycolumn, yytext());}
 
 
+<YYINITIAL> {COMENTARIO_LINEA} {}
+<YYINITIAL> {COMENTARIO_MULTIPLE} {}
 
 <YYINITIAL>  {BLANCOS} {}
+
+
+
 
 <YYINITIAL> . {
                 listaErrores.add(new Errores("LEXICO","El caracter "+
