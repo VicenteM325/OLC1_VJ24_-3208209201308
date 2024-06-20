@@ -12,6 +12,7 @@ import excepciones.Errores;
 //Instrucciones
 import instrucciones.Print;
 import instrucciones.Declaracion;
+import instrucciones.AsignacionVar;
 
 //Expresiones
 import expresiones.Nativo;
@@ -63,7 +64,7 @@ terminal TRUE, FALSE;
 
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
 nonterminal Instruccion INSTRUCCION;
-nonterminal Instruccion IMPRESION, DECLARACION;
+nonterminal Instruccion IMPRESION, DECLARACION, ASIGNACION;
 nonterminal Tipo TIPOS;
 nonterminal Instruccion EXPRESION;
 
@@ -85,6 +86,7 @@ INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b             {:  RESULT = a; RESU
 
 INSTRUCCION ::= IMPRESION:a                                       {: RESULT=a;  :}
                | DECLARACION:a                                    {: RESULT=a;  :}
+               | ASIGNACION:a                                     {: RESULT=a;  :}
                | error FINCADENA   
                | error
 ;
@@ -93,6 +95,9 @@ IMPRESION ::=  PRINTLN PAR_A EXPRESION:a PAR_C FINCADENA        {:  RESULT = new
 ;
 
 DECLARACION ::= TIPOS:a ID:b IGUAL EXPRESION:c FINCADENA        {:  RESULT = new Declaracion(b,c,a,aleft,aright); :}
+;
+
+ASIGNACION ::= ID:a IGUAL EXPRESION:b FINCADENA                 {:  RESULT= new AsignacionVar(a,b,aleft,aright);    :}
 ;
 
 TIPOS     ::= INT                                               {:  RESULT = new Tipo(TipoDato.ENTERO);  :}
