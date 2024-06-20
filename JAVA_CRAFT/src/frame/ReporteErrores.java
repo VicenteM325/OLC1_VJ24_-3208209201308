@@ -6,6 +6,7 @@ package frame;
 
 import excepciones.Errores;
 import java.util.LinkedList;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -18,19 +19,21 @@ public class ReporteErrores extends javax.swing.JFrame {
     public ReporteErrores(LinkedList<Errores> listaErrores) {
         this.listaErrores = listaErrores;
         initComponents();
-        mostrarErrores();
     }
 
-    private void mostrarErrores() {
+    public ReporteErrores() {
         StringBuilder sb = new StringBuilder();
         for (Errores error : listaErrores) {
-            sb.append("Tipo: ").append(error.getTipo())
-              .append(", Mensaje: ").append(error.getDesc())
-              .append(", Línea: ").append(error.getLinea())
-              .append(", Columna: ").append(error.getColumna())
-              .append("\n");
+            sb.append(error.toString()).append("\n");
         }
         jTextAreaErrores.setText(sb.toString());
+    }
+    
+    public static void reporteErrores(LinkedList<Errores> listaErrores){
+        SwingUtilities.invokeLater(() -> {
+            ReporteErrores frame = new ReporteErrores(listaErrores);
+            frame.setVisible(true);
+        });
     }
     /**
      * This method is called from within the constructor to initialize the form.

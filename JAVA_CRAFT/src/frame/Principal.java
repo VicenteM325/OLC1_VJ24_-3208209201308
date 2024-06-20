@@ -426,12 +426,17 @@ public class Principal extends javax.swing.JFrame {
                     lista.add((Errores) res);
                 }
             }
+            StringBuilder output = new StringBuilder();
+            output.append(ast.getConsola()).append("\n");
             jConsola3.setText(ast.getConsola());
             System.out.println(ast.getConsola());
-
-            for(var i:lista){
+            
+            for (var i : lista) {
                 System.out.println(i);
+                output.append(i.toString()).append("\n");
             }
+            jConsola3.setText(output.toString());
+
         } catch (Exception ex) {
             System.out.println("Algo salio mal");
 
