@@ -129,7 +129,7 @@ public class Aritmeticas extends Instruccion {
                     }
                     case DECIMAL -> {
                         this.tipo.setTipo(TipoDato.DECIMAL);
-                        return (int) op1 - (double) op2;
+                        return (double) (int) op1 - (double) op2;
                     }
                     case CARACTER -> {
                         this.tipo.setTipo(TipoDato.ENTERO);
@@ -267,11 +267,11 @@ public class Aritmeticas extends Instruccion {
                     }
                     case DECIMAL -> {
                         this.tipo.setTipo(TipoDato.DECIMAL);
-                        return (int) op1 / (double) op2;
+                        return (double)(int) op1 / (double) op2;
                     }
                     case CARACTER -> {
                         this.tipo.setTipo(TipoDato.DECIMAL);
-                        return (int) op1 / (char) op2;
+                        return (double)(int) op1 / (char) op2;
                     }
                     default -> {
                         return new Errores("SEMANTICO", "División erronea", this.linea, this.columna);
@@ -301,11 +301,11 @@ public class Aritmeticas extends Instruccion {
                 switch (tipo2) {
                     case ENTERO -> {
                         this.tipo.setTipo(TipoDato.DECIMAL);
-                        return (char) op1 / (int) op2;
+                        return (double) (char) op1 / (int) op2;
                     }
                     case DECIMAL -> {
                         this.tipo.setTipo(TipoDato.DECIMAL);
-                        return (char) op1 / (double) op2;
+                        return  (double) (char) op1 / (double) op2;
                     }
                     default -> {
                         return new Errores("SEMANTICO", "División erronea", this.linea, this.columna);
@@ -378,7 +378,7 @@ public class Aritmeticas extends Instruccion {
                     }
                     case DECIMAL -> {
                         this.tipo.setTipo(TipoDato.DECIMAL);
-                        return (int) op1 % (double) op2;
+                        return (double)(int) op1 % (double) op2;
                     }
                     default -> {
                         return new Errores("SEMANTICO", "Modulo erroneo", this.linea, this.columna);

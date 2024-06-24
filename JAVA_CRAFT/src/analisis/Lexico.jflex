@@ -57,7 +57,10 @@ XOR = "\^"
 NOT = "!"
 
 FINCADENA = ";"
+LLAVE1 = "{"
+LLAVE2 = "}"
 
+//Expresiones regulares
 BLANCOS = [\ \r\t\n\f]+
 ENTERO = [0-9]+
 DECIMAL = [0-9]+"."[0-9]+
@@ -75,8 +78,10 @@ PRINTLN="println"
 INT = "int"
 DOUBLE = "double"
 STRING = "string"
+IF = "if"
 TRUE = "true"
 FALSE = "false"
+BOOL = "bool"
 
 
 
@@ -89,6 +94,9 @@ FALSE = "false"
 <YYINITIAL>  {STRING} {return new Symbol(sym.STRING, yyline, yycolumn, yytext());}
 <YYINITIAL>  {TRUE} {return new Symbol(sym.TRUE, yyline, yycolumn, yytext());}
 <YYINITIAL>  {FALSE} {return new Symbol(sym.FALSE, yyline, yycolumn, yytext());}
+<YYINITIAL>  {IF} {return new Symbol(sym.IF, yyline, yycolumn, yytext());}
+<YYINITIAL>  {BOOL} {return new Symbol(sym.BOOL, yyline, yycolumn, yytext());}
+
 
 //LOGICOS
 <YYINITIAL>  {AND} {return new Symbol(sym.AND, yyline, yycolumn, yytext());}
@@ -116,6 +124,8 @@ FALSE = "false"
 <YYINITIAL>  {FINCADENA} {return new Symbol(sym.FINCADENA, yyline, yycolumn, yytext());}
 <YYINITIAL>  {PAR_A} {return new Symbol(sym.PAR_A, yyline, yycolumn, yytext());}
 <YYINITIAL>  {PAR_C} {return new Symbol(sym.PAR_C, yyline, yycolumn, yytext());}
+<YYINITIAL>  {LLAVE1} {return new Symbol(sym.LLAVE1, yyline, yycolumn, yytext());}
+<YYINITIAL>  {LLAVE2} {return new Symbol(sym.LLAVE2, yyline, yycolumn, yytext());}
 
 //ARITMETICOS
 <YYINITIAL>  {MAS} {return new Symbol(sym.MAS, yyline, yycolumn, yytext());}
