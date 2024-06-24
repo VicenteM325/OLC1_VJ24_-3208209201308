@@ -57,9 +57,9 @@ action code
 :}
 
 terminal String CADENA,ENTERO, DECIMAL, ID, CARACTER;
-terminal FINCADENA, PRINTLN, INT, DOUBLE, STRING;
+terminal FINCADENA, PRINTLN, INT, DOUBLE, STRING, CHAR, VAR, CONST;
 terminal PAR_A, PAR_C, MAS, MENOS, MULTIPLICACION,DIVISION,POTENCIA, MODULO, UMENOS;
-terminal MENOR_QUE, MAYOR_QUE, DIFEREN, MENOR_IGUAL_QUE, IGUALACION, MAYOR_IGUAL_QUE, IGUAL;
+terminal MENOR_QUE, MAYOR_QUE, DIFEREN, MENOR_IGUAL_QUE, IGUALACION, MAYOR_IGUAL_QUE, IGUAL, DOS_PUNTOS;
 terminal OR, AND, XOR, NOT;
 terminal TRUE, FALSE, IF, BOOL;
 terminal LLAVE1, LLAVE2;
@@ -76,7 +76,7 @@ precedence left IGUALACION, DIFEREN, MENOR_IGUAL_QUE, MAYOR_IGUAL_QUE, MENOR_QUE
 precedence left MAS, MENOS;
 precedence left MULTIPLICACION, DIVISION;
 precedence left POTENCIA, MODULO;
-precedence left NOT;
+precedence right NOT;
 precedence right UMENOS;
 
 start with INICIO;
@@ -98,7 +98,11 @@ INSTRUCCION ::= IMPRESION:a                                       {: RESULT=a;  
 IMPRESION ::=  PRINTLN PAR_A EXPRESION:a PAR_C FINCADENA        {:  RESULT = new Print(a, aleft,aright); :}
 ;
 
-DECLARACION ::= TIPOS:a ID:b IGUAL EXPRESION:c FINCADENA        {:  RESULT = new Declaracion(b,c,a,aleft,aright); :}
+DECLARACION ::= VAR ID:b DOS_PUNTOS TIPOS:a FINCADENA                             {:  RESULT = new Declaracion(b,a,true,aleft,aright); :}
+            | CONST ID:b DOS_PUNTOS TIPOS:a FINCADENA                           {:  RESULT = new Declaracion(b,a,false,aleft,aright); :} 
+            | VAR ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FINCADENA         {:  RESULT = new Declaracion(b,c,a,true,aleft,aright); :}
+            | CONST ID:b DOS_PUNTOS TIPOS:a  IGUAL EXPRESION:c FINCADENA        {:  RESULT = new Declaracion(b,c,a,false,aleft,aright); :}
+            
 ;
 
 ASIGNACION ::= ID:a IGUAL EXPRESION:b FINCADENA                 {:  RESULT= new AsignacionVar(a,b,aleft,aright);    :}
@@ -111,7 +115,9 @@ TIPOS     ::= INT                                               {:  RESULT = new
             | DOUBLE                                            {:  RESULT = new Tipo(TipoDato.DECIMAL); :}
             | STRING                                            {:  RESULT = new Tipo(TipoDato.CADENA);  :}
             | BOOL                                              {:  RESULT = new Tipo(TipoDato.BOOLEANO);  :}
+            | CHAR                                              {:  RESULT = new Tipo(TipoDato.CARACTER);  :}
 ;
+
 
 EXPRESION ::= MENOS EXPRESION:a                                 {:   RESULT = new Aritmeticas(a,OperadoresAritmeticos.NEGACION, aleft, aright);      :}%prec UMENOS
             | DIFEREN EXPRESION:a                               {: RESULT = new Logicos(a, OperadoresLogicos.NOT, aleft, aright);                  :}%prec NOT
@@ -135,7 +141,7 @@ EXPRESION ::= MENOS EXPRESION:a                                 {:   RESULT = ne
             | CADENA:a                                          {: RESULT = new Nativo(a, new Tipo(TipoDato.CADENA), aleft, aright);                  :}
             | TRUE:a                                            {: RESULT = new Nativo(true, new Tipo(TipoDato.BOOLEANO), aleft, aright );            :}
             | FALSE:a                                           {: RESULT = new Nativo(false, new Tipo(TipoDato.BOOLEANO), aleft, aright );           :}
-            | CARACTER:a                                        {: RESULT = new Nativo(a, new Tipo(TipoDato.CARACTER), aleft, aright);                :}
+            | CARACTER:a                                        {: RESULT = new Nativo(a.charAt(0), new Tipo(TipoDato.CARACTER), aleft, aright);                :}
             | ID:a                                              {: RESULT = new AccesoVar(a,aleft, aright);    :}
             | PAR_A EXPRESION:a PAR_C                           {: RESULT = a; :}
             

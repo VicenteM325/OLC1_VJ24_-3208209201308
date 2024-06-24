@@ -57,6 +57,7 @@ XOR = "\^"
 NOT = "!"
 
 FINCADENA = ";"
+DOS_PUNTOS = ":"
 LLAVE1 = "{"
 LLAVE2 = "}"
 
@@ -82,6 +83,9 @@ IF = "if"
 TRUE = "true"
 FALSE = "false"
 BOOL = "bool"
+VAR = "var"
+CONST = "const"
+CHAR = "char"
 
 
 
@@ -96,6 +100,9 @@ BOOL = "bool"
 <YYINITIAL>  {FALSE} {return new Symbol(sym.FALSE, yyline, yycolumn, yytext());}
 <YYINITIAL>  {IF} {return new Symbol(sym.IF, yyline, yycolumn, yytext());}
 <YYINITIAL>  {BOOL} {return new Symbol(sym.BOOL, yyline, yycolumn, yytext());}
+<YYINITIAL>  {VAR} {return new Symbol(sym.VAR, yyline, yycolumn, yytext());}
+<YYINITIAL>  {CONST} {return new Symbol(sym.CONST, yyline, yycolumn, yytext());}
+<YYINITIAL>  {CHAR} {return new Symbol(sym.CHAR, yyline, yycolumn, yytext());}
 
 
 //LOGICOS
@@ -122,6 +129,7 @@ BOOL = "bool"
 
 
 <YYINITIAL>  {FINCADENA} {return new Symbol(sym.FINCADENA, yyline, yycolumn, yytext());}
+<YYINITIAL>  {DOS_PUNTOS} {return new Symbol(sym.DOS_PUNTOS, yyline, yycolumn, yytext());}
 <YYINITIAL>  {PAR_A} {return new Symbol(sym.PAR_A, yyline, yycolumn, yytext());}
 <YYINITIAL>  {PAR_C} {return new Symbol(sym.PAR_C, yyline, yycolumn, yytext());}
 <YYINITIAL>  {LLAVE1} {return new Symbol(sym.LLAVE1, yyline, yycolumn, yytext());}

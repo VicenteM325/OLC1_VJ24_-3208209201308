@@ -28,6 +28,9 @@ public class AsignacionVar extends Instruccion {
         if(variable==null){
             return new Errores("SEMANTICO", "Varible no existente para asignacion", this.linea, this.columna);
         }
+        if (!variable.isMutabilidad()) {
+            return new Errores("SEMANTICO", "No se puede modificar el valor de una constante", this.linea, this.columna);
+        }
         
        var newValor = this.exp.interpretar(arbol, tabla);
        if(newValor instanceof Errores){
