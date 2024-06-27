@@ -86,6 +86,7 @@ BOOL = "bool"
 VAR = "var"
 CONST = "const"
 CHAR = "char"
+ELSE = "else"
 
 
 
@@ -103,6 +104,7 @@ CHAR = "char"
 <YYINITIAL>  {VAR} {return new Symbol(sym.VAR, yyline, yycolumn, yytext());}
 <YYINITIAL>  {CONST} {return new Symbol(sym.CONST, yyline, yycolumn, yytext());}
 <YYINITIAL>  {CHAR} {return new Symbol(sym.CHAR, yyline, yycolumn, yytext());}
+<YYINITIAL>  {ELSE} {return new Symbol(sym.ELSE, yyline, yycolumn, yytext());}
 
 
 //LOGICOS

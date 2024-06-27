@@ -11,8 +11,8 @@ public class sym {
   public static final int CONST = 14;
   public static final int CHAR = 12;
   public static final int IGUALACION = 28;
-  public static final int LLAVE2 = 41;
-  public static final int LLAVE1 = 40;
+  public static final int LLAVE2 = 42;
+  public static final int LLAVE1 = 41;
   public static final int ENTERO = 3;
   public static final int XOR = 34;
   public static final int DOUBLE = 10;
@@ -41,6 +41,7 @@ public class sym {
   public static final int PAR_C = 16;
   public static final int PAR_A = 15;
   public static final int POTENCIA = 21;
+  public static final int ELSE = 40;
   public static final int MAYOR_IGUAL_QUE = 29;
   public static final int STRING = 11;
   public static final int MENOR_QUE = 24;
@@ -91,6 +92,7 @@ public class sym {
   "FALSE",
   "IF",
   "BOOL",
+  "ELSE",
   "LLAVE1",
   "LLAVE2"
   };
