@@ -251,7 +251,7 @@ public class Relacionales extends Instruccion {
                     }
                     case TipoDato.DECIMAL -> {
                         this.tipo.setTipo(TipoDato.BOOLEANO);
-                        return (int) op1 < (double) op2;
+                        return (double)(int) op1 < (double) op2;
                     }
                     case TipoDato.CARACTER -> {
                         this.tipo.setTipo(TipoDato.BOOLEANO);

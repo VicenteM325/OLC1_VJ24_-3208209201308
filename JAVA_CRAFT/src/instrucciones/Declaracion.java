@@ -1,4 +1,4 @@
-package instrucciones;
+    package instrucciones;
 
 import abstracto.Instruccion;
 import excepciones.Errores;
